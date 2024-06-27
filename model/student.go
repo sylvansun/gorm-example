@@ -1,6 +1,9 @@
 package model
 
-import "fmt"
+import (
+	"fmt"
+	"gorm_example/dal"
+)
 
 type Student struct {
 	ID     uint   `gorm:"size:3"`
@@ -10,7 +13,15 @@ type Student struct {
 	Email  *string `gorm:"size:32"`
 }
 
-func CreateStudent() *Student {
+func CreateTable() {
+	err := dal.DB.AutoMigrate(&Student{})
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func CreateStudent() {
 	email := "jack@gmail.com"
 	sampleStu := Student{
 		Name:   "jack",
@@ -18,10 +29,14 @@ func CreateStudent() *Student {
 		Gender: true,
 		Email:  &email,
 	}
-	return &sampleStu
+	err := dal.DB.Create(&sampleStu).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	return
 }
 
-func CreateStudentInBatch() []Student {
+func CreateStudentInBatch() {
 	var studentList []Student
 	email := "jack@gmail.com"
 	for i := 0; i < 100; i++ {
@@ -32,5 +47,9 @@ func CreateStudentInBatch() []Student {
 			Email:  &email,
 		})
 	}
-	return studentList
+	err := dal.DB.Create(&studentList).Error
+	if err != nil {
+		fmt.Println(err)
+	}
+	return
 }
