@@ -53,3 +53,24 @@ func CreateStudentInBatch() {
 	}
 	return
 }
+
+func ReadStudentById(studentID uint) {
+	var student Student
+	err := dal.DB.Take(&student, studentID).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(student)
+}
+
+func ReadStudentByStruct() {
+	student := Student{}
+	student.Name = "jack"
+	err := dal.DB.Take(&student).Error
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(student)
+}
